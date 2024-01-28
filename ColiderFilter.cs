@@ -16,7 +16,7 @@ namespace ColliderTouchSystem.Abstract
 
         [SerializeField] protected UnityEvent<GameObject> _action;
 
-        private readonly List<Func<GameObject, bool>> _filters = new List<Func<GameObject, bool>>();
+        private readonly List<Func<GameObject, bool>> _filters = new();
 
         private void Awake()
         {
@@ -46,7 +46,7 @@ namespace ColliderTouchSystem.Abstract
         {
             foreach (var filter in _filters)
             {
-                if (!filter(_object)) return;
+                if(!filter(_object)) return;
             }
 
             _action?.Invoke(_object);

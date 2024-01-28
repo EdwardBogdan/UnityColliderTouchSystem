@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace ColliderTouchSystem.Touch
 {
-    public class ColiderTouchKeeper : MonoBehaviour
+    public class ColliderTouchKeeper : MonoBehaviour
     {
         [SerializeField] UnityEvent<GameObject> _OnEnter;
         [SerializeField] UnityEvent<GameObject> _OnExit;
 
-        public bool IsTouched { get; private set; }
+        public bool IsTouched { get; private set; } = false;
         public float LastTouchTime { get; private set; }
 
         private readonly HashSet<GameObject> CheckList = new();
@@ -18,23 +18,21 @@ namespace ColliderTouchSystem.Touch
         {
             if (CheckList.Count <= 0)
             {
-                IsTouched = true;
+                IsTouched = enabled = true;
                 _OnEnter.Invoke(_object);
-                enabled = true;
             }
 
             CheckList.Add(_object);
         }
         public void OnRemoveTouch(GameObject _object)
         {
+            CheckList.Remove(_object);
+
             if (CheckList.Count <= 0)
             {
-                IsTouched = false;
+                IsTouched = enabled = false;
                 _OnExit.Invoke(_object);
-                enabled = false;
             }
-
-            CheckList.Remove(_object);
         }
 
         private void Awake()
